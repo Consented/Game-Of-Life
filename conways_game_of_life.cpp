@@ -2,10 +2,10 @@
 #include <vector>
 #include <unordered_map>
 
-void display(std::vector<std::vector<int>> board, std::unordered_map<int, char> symbols){
+void display(const std::vector<std::vector<int>>& board, const std::unordered_map<int, char>& symbols){
 	for (int i = 0; i < board.size(); i++){
 		for (int j = 0; j < board[i].size(); j++){
-			std::cout << symbols[board[i][j]];
+			std::cout << symbols.at(board[i][j]);
 		}
 		std::cout << "\n";
 	}
@@ -14,7 +14,9 @@ void display(std::vector<std::vector<int>> board, std::unordered_map<int, char> 
 
 std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 
-	struct data_struct{ 
+	// ideally i want a vector with 2 types but i am using struct instead to do this
+
+	struct data_struct{ // should i be declaring this globally or something rather than initialising the struct each function call?
 		int* pointer {NULL};
 		int value {};
 	};
@@ -26,25 +28,25 @@ std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 
 	for (int i = 1; i < board.size()-1; i++){
 		for (int j = 1; j < board[i].size()-1; j++){
-
 			neighbours = 0;
 
-			for (int k = -1; k < 2; k++){
+			for (int k = -1; k < 2; k++){ // checks adjacent tiles
 				for (int l = -1; l < 2; l++){
 					neighbours += board[i+k][j+l];
 				}
 			}
 
 			neighbours -= board[i][j];
-			if (neighbours != 2 && neighbours > 0){
+
+			if (neighbours != 2 && neighbours > 0){ // if gonna die big rip :(
 				if (neighbours < 2 || neighbours > 3){
 					data.value = 0;
 				}
-				else if (neighbours == 3){
+				else if (neighbours == 3){ // if gonna be born hi lil guy
 					data.value = 1;
 				}
 
-				int *x = &board[i][j];
+				int *x = &board[i][j]; // store za location of where the change has occured
 				data.pointer = x;
 
 				changes.push_back(data);
@@ -53,7 +55,7 @@ std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 		}
 	}
 
-	for (int i = 0; i < changes.size(); i++){
+	for (int i = 0; i < changes.size(); i++){ // make the changes occur!!
 		*changes[i].pointer = changes[i].value;
 	}
 
