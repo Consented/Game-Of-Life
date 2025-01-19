@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 
-void display(const std::vector<std::vector<int>>& board, const std::unordered_map<int, char>& symbols){
+void display(const std::vector<std::vector<int>> &board, const std::unordered_map<int, char>&symbols){
 	for (int i = 0; i < board.size(); i++){
 		for (int j = 0; j < board[i].size(); j++){
 			std::cout << symbols.at(board[i][j]);
@@ -12,7 +12,7 @@ void display(const std::vector<std::vector<int>>& board, const std::unordered_ma
 	std::cout << "\n";
 }
 
-std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
+void tick(std::vector<std::vector<int>> &board){
 
 	// ideally i want a vector with 2 types but i am using struct instead to do this
 
@@ -30,7 +30,7 @@ std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 		for (int j = 1; j < board[i].size()-1; j++){
 			neighbours = 0;
 
-			for (int k = -1; k < 2; k++){ // checks adjacent tiles
+			for (int k = -1; k < 2; k++){ 
 				for (int l = -1; l < 2; l++){
 					neighbours += board[i+k][j+l];
 				}
@@ -38,15 +38,15 @@ std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 
 			neighbours -= board[i][j];
 
-			if (neighbours != 2 && neighbours > 0){ // if gonna die big rip :(
+			if (neighbours != 2 && neighbours > 0){ 
 				if (neighbours < 2 || neighbours > 3){
 					data.value = 0;
 				}
-				else if (neighbours == 3){ // if gonna be born hi lil guy
+				else if (neighbours == 3){
 					data.value = 1;
 				}
 
-				int *x = &board[i][j]; // store za location of where the change has occured
+				int *x = &board[i][j];
 				data.pointer = x;
 
 				changes.push_back(data);
@@ -59,7 +59,6 @@ std::vector<std::vector<int>> tick(std::vector<std::vector<int>> board){
 		*changes[i].pointer = changes[i].value;
 	}
 
-	return board;
 
 }
 
@@ -82,13 +81,13 @@ int main(){
     // todo add blinker
 
     std::cout << "Enter number of generations: ";
-    std::cin >> generations;
+    std::cin >> generations; 
 
 	display(board, symbols);
 
     for (int i = 0; i < generations; i++){
     	std::cout << "\033[H\033[J";
-    	board = tick(board);
+    	tick(board);
     	display(board, symbols);
     }
 
